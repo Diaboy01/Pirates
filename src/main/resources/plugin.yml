@@ -1,7 +1,10 @@
 name: Pirates
 version: '${project.version}'
-main: net.novorex.pirates.Pirates
+main: net.novorex.pirates.Main
 api-version: 1.16
 authors: [ Diaboy01, NovorexNetwork ]
 description: novorex.net
 website: novorex.net
+
+commands:
+  inv:
