@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class GetInventoryBackup implements CommandExecutor {
+public class GetInventoryByCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

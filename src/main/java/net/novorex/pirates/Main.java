@@ -3,9 +3,6 @@ package net.novorex.pirates;
 import net.novorex.pirates.commands.*;
 import net.novorex.pirates.listener.*;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,8 +21,9 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerJoinListener(), this);
         pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
+        pluginManager.registerEvents(new PlayerPickupItemListener(), this);
 
-        getCommand("inv").setExecutor(new GetInventoryBackup());
+        getCommand("inv").setExecutor(new GetInventoryByCMD());
     }
 
        //     for (Player player : Bukkit.getOnlinePlayers()) {
