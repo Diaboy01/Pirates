@@ -146,12 +146,5 @@ public class PlayerWorldTimingListener implements Listener {
 
         PlayerWorldTimings.dispose(player.getUniqueId());
 
-        World bauwelt = Bukkit.getWorld(Bauwelt);
-        World world = player.getWorld();
-        String worldName = world.getName();
-
-        if (!worldName.equals(Bauwelt)) {
-            player.teleport(new Location(bauwelt, 0, 93, 0));
-        }
     }
 }
