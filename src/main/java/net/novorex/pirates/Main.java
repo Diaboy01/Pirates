@@ -1,5 +1,6 @@
 package net.novorex.pirates;
 
+import net.novorex.pirates.api.claim.ClaimNotifyHandler;
 import net.novorex.pirates.commands.*;
 import net.novorex.pirates.listener.*;
 import org.bukkit.Bukkit;
@@ -22,8 +23,14 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerWorldTimingListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new PlayerPickupItemListener(), this);
+        pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
+        pluginManager.registerEvents(new PortalListener(), this);
 
         getCommand("inv").setExecutor(new GetInventoryByCMD());
+        getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
+        getCommand("claim").setExecutor(new ClaimCommand());
+
+        ClaimNotifyHandler.init();
     }
 
        //     for (Player player : Bukkit.getOnlinePlayers()) {

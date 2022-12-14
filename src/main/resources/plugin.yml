@@ -8,3 +8,5 @@ website: novorex.net
 
 commands:
   inv:
+  modifydamage:
+  claim:

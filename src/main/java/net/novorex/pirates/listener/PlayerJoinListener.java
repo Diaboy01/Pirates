@@ -1,11 +1,20 @@
 package net.novorex.pirates.listener;
 
+import net.novorex.pirates.Main;
+import net.novorex.pirates.api.claim.ClaimAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.io.File;
+
+
+import static net.novorex.pirates.api.YAMLPlayers.printYml;
+
 
 public class PlayerJoinListener implements Listener {
 
@@ -15,21 +24,50 @@ public class PlayerJoinListener implements Listener {
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
         Player player = event.getPlayer();
-        String playerName = player.getName();
         event.setJoinMessage("§fServer §8➝ §7 [+] " + player.getName());
+        String playerName = player.getName();
 
-        if(player.isOp()) {
-            player.setPlayerListName("§r§l" + player.getDisplayName());
-        } else {
-            player.setPlayerListName("§r" + player.getDisplayName());
-        }
+        Bukkit.dispatchCommand(console,"tellraw " + playerName + " [\"\",{\"text\":\"Sponsor: \",\"italic\":true,\"color\":\"gold\"},{\"text\":\"Nitrado.net\",\"italic\":true,\"underlined\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://nitra.do/KevinFilmt\"}}]");
 
-        if (player.hasPlayedBefore()) {
+        File playersFile = new File("plugins/Novorex/Players/", playerName + ".yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+
+        String teamName = config.getString("Team");
+
+        if(player.hasPlayedBefore()) {
             //NORMAL JOIN
+            Bukkit.dispatchCommand(console, "scoreboard teams add " + teamName);
+            Bukkit.dispatchCommand(console, "scoreboard teams join " + teamName + " " + playerName);
+
         } else {
             //FIRST JOIN
+            //for(int i = 0; i < 35; i++){
+            //player.getInventory().setItem(i, null);
+            //}
+            player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+            Bukkit.dispatchCommand(console, "scoreboard teams add - ");
+            Bukkit.dispatchCommand(console, "scoreboard teams join - " + playerName);
+            printYml(playerName, "Team", "-");
+            player.sendTitle("§e§lEMPIRE OF PIRATES 2", "Willkommen " + playerName + "!", 20, 120, 20);
+            Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "clear " + playerName), 20L * 8);
+            Bukkit.getScheduler().runTaskLater(Main.instance, () ->Bukkit.dispatchCommand(console, "kit give starter " + playerName), 20L * 10);
+
         }
 
+        String prefix = String.format("%s", teamName);
+        if (prefix == null || prefix.equals("-")) {
+            prefix = "";
+        } else prefix = "#" + prefix + " ";
+
+        if(player.isOp()) {
+            player.setPlayerListName("" + prefix + "" + player.getDisplayName());
+        } else {
+            player.setPlayerListName("" + prefix + "" + player.getDisplayName());
+        }
+
+        player.setPlayerListHeaderFooter("§e§lEMPIRE OF PIRATES 2", "§6§o➠ Sponsor: Nitrado.net");
 
     }
+
+
 }

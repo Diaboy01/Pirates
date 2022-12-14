@@ -2,7 +2,9 @@ package net.novorex.pirates.listener;
 
 import com.google.common.collect.Lists;
 import net.kyori.adventure.text.Component;
+import net.novorex.pirates.Main;
 import net.novorex.pirates.api.InventoryUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
@@ -42,5 +44,6 @@ public class PlayerDeathListener implements Listener {
         itemStack.setItemMeta(skullMeta);
         Item item = player.getWorld().dropItem(player.getLocation(), itemStack);
         item.setGlowing(true);
+        Bukkit.getScheduler().runTaskLater(Main.instance, () ->item.remove(), 20L * 10);
     }
 }
