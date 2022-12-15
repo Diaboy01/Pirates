@@ -31,12 +31,12 @@ public final class ClaimNotifyHandler {
 
                     if(a) {
                         String name = Bukkit.getOfflinePlayer(UUID.fromString(claimedCurrently)).getName();
-                        player.sendMessage("Du hast das Gebiet von " + (name == null ? "Unbekannt" : name) + " betreten.");
+                        player.sendMessage("Du hast die Teaminsel von " + (name == null ? "einem Spieler" : name) + " betreten.");
                     }
                 } else {
                     if(INSIDE.containsKey(player)) {
                         String name = Bukkit.getOfflinePlayer(UUID.fromString(INSIDE.remove(player))).getName();
-                        player.sendMessage("Du hast das Gebiet von " + (name == null ? "Unbekannt" : name) + " verlassen.");
+                        player.sendMessage("Du hast die Teaminsel von " + (name == null ? "einem Spieler" : name) + " verlassen.");
                         INSIDE.remove(player);
                     }
                 }
