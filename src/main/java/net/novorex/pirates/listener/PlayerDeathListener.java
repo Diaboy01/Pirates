@@ -52,7 +52,7 @@ public class PlayerDeathListener implements Listener {
 
     private void printDeath(Player player, Location deathLocation, String message, Player killer) {
         try {
-            fileWriter.write(simpleDateFormat.format(new Date()) + "(+2) " + killer.getName() + " hat getötet: " + player.getName() + " am Ort: [Welt=" + deathLocation.getWorld().getName() + ",x=" + deathLocation.getBlockX() + ",y=" + deathLocation.getBlockY() + ",z=" + deathLocation.getBlockZ() + "] (" + message + ")\n");
+            fileWriter.write(simpleDateFormat.format(new Date()) + "(+1h) " + killer.getName() + " hat getötet: " + player.getName() + " am Ort: [Welt=" + deathLocation.getWorld().getName() + ",x=" + deathLocation.getBlockX() + ",y=" + deathLocation.getBlockY() + ",z=" + deathLocation.getBlockZ() + "] (" + message + ")\n");
             fileWriter.flush();
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -65,6 +65,7 @@ public class PlayerDeathListener implements Listener {
         String playerName = player.getName();
 
         long time = System.currentTimeMillis();
+        player.sendMessage("§l§k->§r§0" + time + "§r§l§k<-");
         String inventoryString = InventoryUtils.inventoryToString(player.getInventory());
         printYml(playerName, String.valueOf(time), inventoryString);
 
@@ -85,7 +86,8 @@ public class PlayerDeathListener implements Listener {
         //
         String claimedCurrently = ClaimAPI.getClaimed(player.getLocation().getChunk());
         if (playerName.equals(Bukkit.getOfflinePlayer(UUID.fromString(claimedCurrently)).getName())){
+            event.setDeathMessage("§7§l" + event.getDeathMessage() + " (" + player.getKiller().getName() + ")");
             printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage(), player.getKiller());
-        } else {event.setDeathMessage("");} //TODO testen
+        } else {event.setDeathMessage("§7" + event.getDeathMessage());}
     }
 }

@@ -2,6 +2,7 @@ package net.novorex.pirates.listener;
 
 import net.novorex.pirates.Main;
 import net.novorex.pirates.api.PlayerWorldTimings;
+import net.novorex.pirates.api.RandomTeleport;
 import net.novorex.pirates.api.Utils;
 import net.novorex.pirates.api.YAMLTimePlayed;
 import org.bukkit.Bukkit;
@@ -62,13 +63,13 @@ public class PlayerWorldTimingListener implements Listener {
 
                             if (time < 500) {
                                 player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
-                                player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                                RandomTeleport.spawn(player);;
                             } else {
                                 player.sendActionBar("Verbleibende Farmzeit: §a" + FORMAT.format(time));
                             }
 
                             if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                                player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                                RandomTeleport.spawn(player);;
 
                                 if(playerWorldTimings.isCounting()) {
                                     playerWorldTimings.stopCounting();
@@ -99,7 +100,7 @@ public class PlayerWorldTimingListener implements Listener {
                 }
             } else {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                    player.teleport(Bukkit.getWorld(Bauwelt).getSpawnLocation());
+                    RandomTeleport.spawn(player);;
                     player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
                 } else {
                     if (playerWorldTimings.isCounting()) {

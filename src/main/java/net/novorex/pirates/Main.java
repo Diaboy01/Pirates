@@ -26,6 +26,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
         pluginManager.registerEvents(new PortalListener(), this);
 
+        getCommand("talk").setExecutor(new FakeTalk());
         getCommand("inv").setExecutor(new GetInventoryByCMD());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
         getCommand("claim").setExecutor(new ClaimCommand());

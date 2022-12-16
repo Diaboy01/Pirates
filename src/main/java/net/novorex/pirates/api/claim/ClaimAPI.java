@@ -12,12 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 
 public final class ClaimAPI {
 
     private static final NamespacedKey CLAIMED_KEY = new NamespacedKey("novorex", "claimed");
 
-    private static final char SPLIT = 'P';
+    private static final String SPLIT = "P";
     private static final File FILE = new File("plugins/Novorex/Claim/", "claims.yml");
     private static final YamlConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
 
@@ -32,19 +33,31 @@ public final class ClaimAPI {
         return CONFIG.contains(player.getUniqueId().toString());
     }
 
+    public static boolean hasClaim(@NotNull UUID uuid) {
+        return CONFIG.contains(uuid.toString());
+    }
+
     public static void unclaim(@NotNull Player player) {
-        if(hasClaim(player)) {
-            String claim = CONFIG.getString(player.getUniqueId().toString());
+        unclaim(player.getUniqueId());
+    }
+
+    public static boolean unclaim(@NotNull UUID uuid) {
+        if(hasClaim(uuid)) {
+            String claim = CONFIG.getString(uuid.toString()); //TODO Chunk aus YML löschen CONFIG.set
             String[] splitted = claim.split(String.valueOf(SPLIT));
 
             int x = Integer.parseInt(splitted[0]), z = Integer.parseInt(splitted[1]);
             World world = Bukkit.getWorld(splitted[2]);
 
-            if(world != null) {
+            if (world != null) {
                 Chunk baseChunk = world.getChunkAt(x, z);
                 Arrays.stream(getAreaChunks(baseChunk)).forEach(chunk -> chunk.getPersistentDataContainer().remove(CLAIMED_KEY));
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private static void save() {
@@ -55,13 +68,12 @@ public final class ClaimAPI {
         }
     }
 
-    private static final int CHUNK_OFFSET = 5; //TODO modify chunk size: CHUNK_OFFSET = 1 -> 4x4, CHUNK_OFFSET = 2 -> 5x5, ...
     private static Chunk[] getAreaChunks(@NotNull Chunk chunk) {
-        Chunk[] chunks = new Chunk[(3 + CHUNK_OFFSET) * (3 + CHUNK_OFFSET)];
+        Chunk[] chunks = new Chunk[7 * 7];
 
         int j = 0;
-        for(int x = -1 - CHUNK_OFFSET; x < 2 + CHUNK_OFFSET; x++) {
-            for(int z = -1 - CHUNK_OFFSET; z < 2 + CHUNK_OFFSET; z++) {
+        for(int x = -3; x < 4; x++) {
+            for(int z = -3; z < 4; z++) {
                 chunks[j++] = chunk.getWorld().getChunkAt(chunk.getX() + x, chunk.getZ() + z);
             }
         }
