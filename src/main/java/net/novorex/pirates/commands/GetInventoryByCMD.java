@@ -44,7 +44,7 @@ public class GetInventoryByCMD implements CommandExecutor {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
             String inventoryString = config.getString(args[0]);
-            Inventory inv = InventoryUtils.stringToInventory(inventoryString);
+            Inventory inv = InventoryUtils.stringToInventory(inventoryString); //TODO null pointer & -33 nur bei richtiger Zahl
 
             Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
                 if(player.getInventory().firstEmpty() == -1) {

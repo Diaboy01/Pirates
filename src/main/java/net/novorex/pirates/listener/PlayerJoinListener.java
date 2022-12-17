@@ -6,6 +6,7 @@ import net.novorex.pirates.Main;
 import net.novorex.pirates.api.RandomTeleport;
 import net.novorex.pirates.api.claim.ClaimAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -27,6 +28,7 @@ public class PlayerJoinListener implements Listener {
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
         Player player = event.getPlayer();
+        player.setGameMode(GameMode.SURVIVAL);
         event.setJoinMessage("§fServer §8➝ §7 [+] " + player.getName());
         String playerName = player.getName();
 
