@@ -36,10 +36,10 @@ public class ClaimCommand implements CommandExecutor {
                         return false;
                     }
                     ClaimAPI.claim(player.getLocation().getChunk(), player);
-                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + "permission set essentials.setwarp true"), 20L * 1);
-                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "talk " + player.getName() + " setwarp " + "player.getName()"), 20L * 2);
-                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + "permission unset essentials.setwarp"), 20L * 3);
-                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + "permission set essentials.warps.Diaboy01 true"), 20L * 5);
+                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + " permission set essentials.setwarp true"), 20L * 1);
+                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "talk " + player.getName() + "/setwarp " + player.getName()), 20L * 2);
+                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + " permission unset essentials.setwarp"), 20L * 3);
+                    Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "lp user " + player.getName() + " permission set essentials.warps.Diaboy01 true"), 20L * 5);
                     player.sendMessage("Du hast dein Gebiet bei der Position " + player.getLocation().getChunk() + " beansprucht! ( /warp " + player.getName() + " c)");
                     return false;
                 } else if(args.length == 2) {

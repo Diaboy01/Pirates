@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class FakeTalk implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender.isOp()) { //TODO testen
+        if (sender.isOp()) {
             String msg = "";
             for (int i = 1; i < args.length; ++i) {
                 msg = String.valueOf(msg) + args[i];

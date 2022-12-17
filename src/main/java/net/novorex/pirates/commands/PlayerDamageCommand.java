@@ -33,7 +33,7 @@ public class PlayerDamageCommand implements CommandExecutor {
             return true;
         }
         this.saveValue(value);
-        sender.sendMessage("Alle Spieler erleiden nun §c+" + value + "% Schaden pro halbes Herz.");
+        sender.sendMessage("Alle Spieler erleiden nun §c-" + value + "% Schaden pro halbes Herz."); //§c+ wurde zu §c-
         return true;
     }
 

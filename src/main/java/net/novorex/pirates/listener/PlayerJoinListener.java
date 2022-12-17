@@ -3,6 +3,7 @@ package net.novorex.pirates.listener;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.novorex.pirates.Main;
+import net.novorex.pirates.api.RandomTeleport;
 import net.novorex.pirates.api.claim.ClaimAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -59,7 +60,7 @@ public class PlayerJoinListener implements Listener {
             //for(int i = 0; i < 35; i++){
             //player.getInventory().setItem(i, null);
             //}
-            player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+            RandomTeleport.spawn(player);
             Bukkit.dispatchCommand(console, "team add - ");
             Bukkit.dispatchCommand(console, "team join - " + playerName);
             Bukkit.dispatchCommand(console, "eco give " + playerName + " 100");

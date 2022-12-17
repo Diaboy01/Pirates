@@ -25,6 +25,8 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerPickupItemListener(), this);
         pluginManager.registerEvents(new PlayerExtraDamageListener(), this);
         pluginManager.registerEvents(new PortalListener(), this);
+        pluginManager.registerEvents(new CreatureSpawnListener(), this);
+        pluginManager.registerEvents(new PlayerMotdListener(), this);
 
         getCommand("talk").setExecutor(new FakeTalk());
         getCommand("inv").setExecutor(new GetInventoryByCMD());
