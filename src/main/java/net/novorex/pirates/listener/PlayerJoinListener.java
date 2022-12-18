@@ -4,7 +4,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.novorex.pirates.Main;
 import net.novorex.pirates.api.RandomTeleport;
-import net.novorex.pirates.api.claim.ClaimAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.ConsoleCommandSender;
@@ -28,6 +27,10 @@ public class PlayerJoinListener implements Listener {
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
         Player player = event.getPlayer();
+
+        Bukkit.dispatchCommand(console, "lp user " + player.getName() + " permission set essentials.warps." + player.getName() +  " true");
+        Bukkit.dispatchCommand(console, "lp user " + player.getName() + " permission unset essentials.warps.Diaboy01");
+
         player.setGameMode(GameMode.SURVIVAL);
         event.setJoinMessage("§fServer §8➝ §7 [+] " + player.getName());
         String playerName = player.getName();
@@ -43,12 +46,11 @@ public class PlayerJoinListener implements Listener {
 
         if(player.hasPlayedBefore()) {
             //NORMAL JOIN
-            //TODO Prefix Farbe mit import org.bukkit.ChatColor oder § verwenden?
             String teamName = config.getString("Team");
             String prefix = String.format("%s", teamName);
             if (teamName == null || prefix == null || prefix.equals("-")) {
                 prefix = "";
-            } else {prefix = "#" + prefix + " ";};
+            } else {prefix = "#" + prefix + " ";}
 
             if(player.isOp()) {
                 player.setPlayerListName("" + prefix + "" + player.getDisplayName());
@@ -72,6 +74,7 @@ public class PlayerJoinListener implements Listener {
             Bukkit.getScheduler().runTaskLater(Main.instance, () ->Bukkit.dispatchCommand(console, "kit starter " + playerName), 20L * 10);
         }
 
+        Bukkit.getScheduler().runTaskLater(Main.instance, () ->player.setGameMode(GameMode.SURVIVAL), 20L * 5);
     }
 
 

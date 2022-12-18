@@ -24,7 +24,7 @@ public class ClaimCommand implements CommandExecutor {
             Location loc = player.getLocation();
             double x = Math.abs(loc.getX());
             double z = Math.abs(loc.getZ());
-            if (x > 300 || z > 300) {
+            if (x > 200 || z > 200) {
                 if (args.length == 0) {
                     if (ClaimAPI.hasClaim(player)) {
                         player.sendMessage("Du hast bereits ein Gebiet geclaimt!");

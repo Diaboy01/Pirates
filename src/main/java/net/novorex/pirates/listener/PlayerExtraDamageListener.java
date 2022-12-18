@@ -16,7 +16,7 @@ public class PlayerExtraDamageListener implements Listener
         if (event.getEntity() instanceof Player) {
             final Player player = (Player)event.getEntity();
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "effect clear " + player.getName() + " shark_mod:bleeding"); //TODO testen
+            Bukkit.dispatchCommand(console, "effect clear " + player.getName() + " shark_mod:bleeding");
 
             final double health = player.getHealth();
             final double value = PlayerDamageCommand.getValue();
@@ -24,7 +24,7 @@ public class PlayerExtraDamageListener implements Listener
                 return;
             }
             final double percent = health * value;
-            event.setDamage(event.getDamage() * (1.0 - percent)); //TODO Testen 1.0 + percent wurde zu 1.0 - percent
+            event.setDamage(event.getDamage() * (1.0 - percent)); // 1.0 + percent wurde zu 1.0 - percent
         }
     }
 }

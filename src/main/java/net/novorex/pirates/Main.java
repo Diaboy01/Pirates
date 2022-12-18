@@ -32,6 +32,7 @@ public final class Main extends JavaPlugin {
         getCommand("inv").setExecutor(new GetInventoryByCMD());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
         getCommand("claim").setExecutor(new ClaimCommand());
+        getCommand("dukaten").setExecutor(new DukatenCommand());
 
         ClaimNotifyHandler.init();
     }

@@ -38,21 +38,25 @@ public class GetInventoryByCMD implements CommandExecutor {
         if(args.length == 1) {
             Player player = (Player) sender;
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "eco take " + player.getName() + " 33");
 
             File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
-            String inventoryString = config.getString(args[0]);
-            Inventory inv = InventoryUtils.stringToInventory(inventoryString); //TODO null pointer & -33 nur bei richtiger Zahl
+            if(config.get(args[0]) != null) {
+                Bukkit.dispatchCommand(console, "eco take " + player.getName() + " 33");
+                String inventoryString = config.getString(args[0]);
+                Inventory inv = InventoryUtils.stringToInventory(inventoryString);
 
-            Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
-                if(player.getInventory().firstEmpty() == -1) {
-                    player.getWorld().dropItem(player.getLocation(), itemStack);
-                } else {
-                    player.getInventory().addItem(itemStack);
-                }
-            });
+                Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
+                    if (player.getInventory().firstEmpty() == -1) {
+                        player.getWorld().dropItem(player.getLocation(), itemStack);
+                    } else {
+                        player.getInventory().addItem(itemStack);
+                    }
+                });
+            } else {
+                player.sendMessage("Diese Zahl existiert nicht.");
+            }
         }
 
         return false;

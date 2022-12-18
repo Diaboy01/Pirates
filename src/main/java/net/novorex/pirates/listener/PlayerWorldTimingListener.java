@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -63,13 +62,13 @@ public class PlayerWorldTimingListener implements Listener {
 
                             if (time < 500) {
                                 player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
-                                RandomTeleport.spawn(player);;
+                                RandomTeleport.spawn(player);
                             } else {
                                 player.sendActionBar("Verbleibende Farmzeit: §a" + FORMAT.format(time));
                             }
 
                             if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                                RandomTeleport.spawn(player);;
+                                RandomTeleport.spawn(player);
 
                                 if(playerWorldTimings.isCounting()) {
                                     playerWorldTimings.stopCounting();
@@ -100,7 +99,7 @@ public class PlayerWorldTimingListener implements Listener {
                 }
             } else {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                    RandomTeleport.spawn(player);;
+                    RandomTeleport.spawn(player);
                     player.sendMessage("Deine Farmzeit ist für heute aufgebraucht!");
                 } else {
                     if (playerWorldTimings.isCounting()) {
@@ -122,7 +121,7 @@ public class PlayerWorldTimingListener implements Listener {
         if(!(player.hasPermission("empire.admin") || player.hasPermission("empire.notime"))) {
             if (x > 1000 || z > 1000) {
                 if(playerWorldTimings.exceedsTimeLimit(PlayerWorldTimings.TIME_LIMIT)) {
-                    event.setCancelled(true);
+                    RandomTeleport.spawn(player);
                 } else {
                     if (!playerWorldTimings.isCounting()) {
                         playerWorldTimings.startCounting();
@@ -139,6 +138,7 @@ public class PlayerWorldTimingListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        event.setQuitMessage("§fServer §8➝ §7 [-] " + player.getName());
         String date = Utils.getDate();
 
         PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());

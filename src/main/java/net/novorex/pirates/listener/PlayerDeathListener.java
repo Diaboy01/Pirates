@@ -64,7 +64,7 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         String playerName = player.getName();
 
-        event.setKeepLevel(true); //TODO Testen
+        event.setKeepLevel(true);
 
         long time = System.currentTimeMillis();
         player.sendMessage("§l§k->§r§0" + time + "§r§l§k<-");
@@ -84,11 +84,10 @@ public class PlayerDeathListener implements Listener {
         itemStack.setItemMeta(skullMeta);
         Item item = player.getWorld().dropItem(player.getLocation(), itemStack);
         item.setGlowing(true);
-        Bukkit.getScheduler().runTaskLater(Main.instance, () ->item.remove(), 20L * 10);
+        Bukkit.getScheduler().runTaskLater(Main.instance, item::remove, 20L * 30);
         //
         String claimedCurrently = ClaimAPI.getClaimed(player.getLocation().getChunk());
-        assert claimedCurrently != null;
-        if (playerName.equals(Bukkit.getOfflinePlayer(UUID.fromString(claimedCurrently)).getName())){ //TODO Printed Fehler?
+        if (claimedCurrently != null && playerName.equals(Bukkit.getOfflinePlayer(UUID.fromString(claimedCurrently)).getName())){
             event.setDeathMessage("§7§l" + event.getDeathMessage() + " (" + player.getKiller().getName() + ")");
             printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage(), player.getKiller());
         } else {event.setDeathMessage("§7" + event.getDeathMessage());}

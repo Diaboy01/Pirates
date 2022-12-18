@@ -43,7 +43,10 @@ public final class ClaimAPI {
 
     public static boolean unclaim(@NotNull UUID uuid) {
         if(hasClaim(uuid)) {
-            String claim = CONFIG.getString(uuid.toString()); //TODO Chunk aus YML löschen CONFIG.set
+            String claim = CONFIG.getString(uuid.toString()); //TODO Testen Chunk aus YML löschen CONFIG.set
+            CONFIG.set(uuid.toString(), null);
+            save();
+
             String[] splitted = claim.split(String.valueOf(SPLIT));
 
             int x = Integer.parseInt(splitted[0]), z = Integer.parseInt(splitted[1]);
