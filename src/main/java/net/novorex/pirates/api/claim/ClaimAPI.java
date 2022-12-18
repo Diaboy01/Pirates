@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 
 public final class ClaimAPI {
@@ -21,6 +22,28 @@ public final class ClaimAPI {
     private static final String SPLIT = "P";
     private static final File FILE = new File("plugins/Novorex/Claim/", "claims.yml");
     private static final YamlConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
+
+    static void init() {
+        Set<String> uuids = CONFIG.getConfigurationSection("").getKeys(false);
+
+        uuids.forEach(u -> {
+            if(CONFIG.get(u) != null) {
+                String content = CONFIG.getString(u);
+                String[] split = content.split(SPLIT);
+
+                if (split.length == 3) {
+                    int x = Integer.parseInt(split[0]), z = Integer.parseInt(split[1]);
+                    String world = split[2];
+
+                    World w = Bukkit.getWorld(world);
+                    if (w != null) {
+                        Chunk chunk = w.getChunkAt(x, z);
+                        Arrays.stream(getAreaChunks(chunk)).forEach(c -> c.getPersistentDataContainer().set(CLAIMED_KEY, PersistentDataType.STRING, u));
+                    }
+                }
+            }
+        });
+    }
 
     public static void claim(@NotNull Chunk chunk, @NotNull Player player) {
         Arrays.stream(getAreaChunks(chunk)).forEach(c -> c.getPersistentDataContainer().set(CLAIMED_KEY, PersistentDataType.STRING, player.getUniqueId().toString()));
@@ -43,7 +66,7 @@ public final class ClaimAPI {
 
     public static boolean unclaim(@NotNull UUID uuid) {
         if(hasClaim(uuid)) {
-            String claim = CONFIG.getString(uuid.toString()); //TODO Testen Chunk aus YML löschen CONFIG.set
+            String claim = CONFIG.getString(uuid.toString());
             CONFIG.set(uuid.toString(), null);
             save();
 

@@ -5,8 +5,14 @@ import java.util.Date;
 
 public class Utils {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private static final SimpleDateFormat DATE_FORMAT_LIGHT = new SimpleDateFormat("dd.MM.yyyy");
+
     public static String getDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        return simpleDateFormat.format(new Date());
+        return DATE_FORMAT_LIGHT.format(new Date());
+    }
+
+    public static String getFullDate() {
+        return DATE_FORMAT.format(new Date());
     }
 }

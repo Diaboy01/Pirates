@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlayerPickupItemListener implements Listener {
+
     @EventHandler
     public void onPlayerDropItem(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
@@ -26,7 +27,7 @@ public class PlayerPickupItemListener implements Listener {
             SkullMeta skullMeta = (SkullMeta)event.getItem().getItemStack().getItemMeta();
             List<String> loreList = skullMeta.getLore();
 
-            if(loreList.size() == 1 && skullMeta.getOwner() != null && skullMeta.getOwner().equals(player.getName())) {
+            if(loreList != null && loreList.size() == 1 && skullMeta.getOwner() != null && skullMeta.getOwner().equals(player.getName())) {
                 String inventoryString = String.valueOf(ChatColor.stripColor(loreList.get(0)));
 
                 File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");

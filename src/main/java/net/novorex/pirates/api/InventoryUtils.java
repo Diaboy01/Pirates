@@ -110,7 +110,11 @@ public class InventoryUtils {
                 for (JsonElement je: jenchants) {
                     JsonObject encObj = je.getAsJsonObject();
                     System.out.println(encObj.toString());
-                    itemMeta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(encObj.get("type").getAsString())), encObj.get("level").getAsInt(), true);
+
+                    Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(encObj.get("type").getAsString()));
+                    if(enchantment != null) {
+                        itemMeta.addEnchant(enchantment, encObj.get("level").getAsInt(), true);
+                    }
                 }
             }
 
