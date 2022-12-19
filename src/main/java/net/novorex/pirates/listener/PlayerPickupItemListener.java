@@ -37,8 +37,8 @@ public class PlayerPickupItemListener implements Listener {
                     event.setCancelled(true);
                     event.getItem().remove();
 
-                    Inventory inv = InventoryUtils.stringToInventory(config.getString(inventoryString));
-                    Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
+                    ItemStack[] content = InventoryUtils.stringToContent(config.getString(inventoryString));
+                    Arrays.stream(content).filter(Objects::nonNull).forEach(itemStack -> {
                         if (player.getInventory().firstEmpty() == -1) {
                             player.getWorld().dropItem(player.getLocation(), itemStack);
                         } else {
