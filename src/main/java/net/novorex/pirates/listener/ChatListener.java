@@ -1,5 +1,6 @@
 package net.novorex.pirates.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +13,6 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         String playerName = player.getName();
         event.setCancelled(true);
-        player.sendMessage("§f" + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
+        Bukkit.broadcastMessage("§f" + "" + player.getDisplayName() + " " + "§8➝ §7" + event.getMessage());
     }
 }

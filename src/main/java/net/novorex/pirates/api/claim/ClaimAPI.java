@@ -11,17 +11,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
 public final class ClaimAPI {
 
-    private static final NamespacedKey CLAIMED_KEY = new NamespacedKey("novorex", "claimed");
+    // private static final NamespacedKey CLAIMED_KEY = new NamespacedKey("novorex", "claimed");
 
     private static final String SPLIT = "P";
     private static final File FILE = new File("plugins/Novorex/Claim/", "claims.yml");
     private static final YamlConfiguration CONFIG = YamlConfiguration.loadConfiguration(FILE);
+    private static final HashMap<String, String> CACHE = new HashMap<>();
 
     static void init() {
         Set<String> uuids = CONFIG.getConfigurationSection("").getKeys(false);
@@ -38,7 +41,11 @@ public final class ClaimAPI {
                     World w = Bukkit.getWorld(world);
                     if (w != null) {
                         Chunk chunk = w.getChunkAt(x, z);
-                        Arrays.stream(getAreaChunks(chunk)).forEach(c -> c.getPersistentDataContainer().set(CLAIMED_KEY, PersistentDataType.STRING, u));
+                        CACHE.put(chunk.toString(), u);
+
+                        Arrays.stream(getAreaChunks(chunk)).forEach(c -> {
+                            CACHE.put(c.toString(), u);
+                        });
                     }
                 }
             }
@@ -46,7 +53,10 @@ public final class ClaimAPI {
     }
 
     public static void claim(@NotNull Chunk chunk, @NotNull Player player) {
-        Arrays.stream(getAreaChunks(chunk)).forEach(c -> c.getPersistentDataContainer().set(CLAIMED_KEY, PersistentDataType.STRING, player.getUniqueId().toString()));
+        Arrays.stream(getAreaChunks(chunk)).forEach(c -> {
+            // c.getPersistentDataContainer().set(CLAIMED_KEY, PersistentDataType.STRING, player.getUniqueId().toString());
+            CACHE.put(chunk.toString(), player.getUniqueId().toString());
+        });
 
         CONFIG.set(player.getUniqueId().toString(), chunk.getX() + SPLIT + chunk.getZ() + SPLIT + chunk.getWorld().getName());
         save();
@@ -77,7 +87,12 @@ public final class ClaimAPI {
 
             if (world != null) {
                 Chunk baseChunk = world.getChunkAt(x, z);
-                Arrays.stream(getAreaChunks(baseChunk)).forEach(chunk -> chunk.getPersistentDataContainer().remove(CLAIMED_KEY));
+                CACHE.remove(baseChunk.toString());
+
+                Arrays.stream(getAreaChunks(baseChunk)).forEach(chunk -> {
+                    // chunk.getPersistentDataContainer().remove(CLAIMED_KEY);
+                    CACHE.remove(chunk.toString());
+                });
             }
 
             return true;
@@ -112,10 +127,12 @@ public final class ClaimAPI {
     }
 
     public static boolean isClaimed(@NotNull Chunk chunk) {
-        return chunk.getPersistentDataContainer().has(CLAIMED_KEY, PersistentDataType.STRING);
+        // return chunk.getPersistentDataContainer().has(CLAIMED_KEY, PersistentDataType.STRING);
+        return CACHE.containsKey(chunk.toString());
     }
 
     public static String getClaimed(@NotNull Chunk chunk) {
-        return chunk.getPersistentDataContainer().has(CLAIMED_KEY, PersistentDataType.STRING) ? chunk.getPersistentDataContainer().get(CLAIMED_KEY, PersistentDataType.STRING) : null;
+        // return chunk.getPersistentDataContainer().has(CLAIMED_KEY, PersistentDataType.STRING) ? chunk.getPersistentDataContainer().get(CLAIMED_KEY, PersistentDataType.STRING) : null;
+        return CACHE.getOrDefault(chunk.toString(), null);
     }
 }

@@ -49,6 +49,7 @@ public class ClaimCommand implements CommandExecutor {
                         if(uuid != null) {
                             if(ClaimAPI.unclaim(uuid)) {
                                 sender.sendMessage("Gebiet von " + UUIDFetcher.getName(uuid) + " gelöscht.");
+                                Bukkit.dispatchCommand(console, "delwarp " + player.getName());
                             } else {
                                 sender.sendMessage("Der Spieler hat kein Gebiet.");
                             }

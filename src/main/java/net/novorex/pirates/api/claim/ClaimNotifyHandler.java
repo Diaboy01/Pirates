@@ -26,7 +26,7 @@ public final class ClaimNotifyHandler {
                 logFile.createNewFile();
             }
 
-            LOGGER = new FileWriter(logFile);
+            LOGGER = new FileWriter(logFile, true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

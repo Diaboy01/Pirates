@@ -10,7 +10,7 @@ public class PlayerWorldTimings {
 
     public static final long TIME_LIMIT = 1000 * 60 * 30; // 30 min.
 
-    private static HashMap<UUID, PlayerWorldTimings> cache = new HashMap<>();
+    private static final HashMap<UUID, PlayerWorldTimings> cache = new HashMap<>();
 
     public static PlayerWorldTimings getTimings(UUID uuid) {
         if(cache.containsKey(uuid)) {
@@ -61,6 +61,10 @@ public class PlayerWorldTimings {
         this.started = false;
         this.timeSpend += System.currentTimeMillis() - this.timing;
         this.timing = 0L;
+    }
+
+    public void clearTime() {
+        this.timeSpend = 0L;
     }
 
     public long getTimeSpend() {

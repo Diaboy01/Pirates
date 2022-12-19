@@ -27,12 +27,15 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PortalListener(), this);
         pluginManager.registerEvents(new CreatureSpawnListener(), this);
         pluginManager.registerEvents(new PlayerMotdListener(), this);
+        pluginManager.registerEvents(new ChatListener(), this);
 
         getCommand("talk").setExecutor(new FakeTalk());
         getCommand("inv").setExecutor(new GetInventoryByCMD());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
         getCommand("claim").setExecutor(new ClaimCommand());
         getCommand("dukaten").setExecutor(new DukatenCommand());
+        getCommand("time").setExecutor(new FarmTimeCommand());
+        getCommand("shop").setExecutor(new ShopCommand());
 
         ClaimNotifyHandler.init();
     }
