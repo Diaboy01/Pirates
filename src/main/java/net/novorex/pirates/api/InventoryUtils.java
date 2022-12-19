@@ -8,11 +8,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +27,7 @@ import java.util.Map;
 
 public class InventoryUtils {
 
+    /* OLD
     public static String inventoryToString(Inventory inventory) {
 
         JsonObject obj = new JsonObject();
@@ -123,5 +131,71 @@ public class InventoryUtils {
         }
 
         return inv;
+    }
+     */
+
+    public static String inventoryToString(Inventory inventory) {
+        return toBase64(inventory);
+    }
+
+    public static ItemStack[] stringToContent(String content) {
+        return stacksFromBase64(content);
+    }
+
+    private static String toBase64(Inventory inventory) {
+        return toBase64(inventory.getContents());
+    }
+
+    private static String toBase64(ItemStack[] contents) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            dataOutput.writeInt(contents.length);
+
+            for (ItemStack stack : contents) {
+                dataOutput.writeObject(stack);
+            }
+
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
+    }
+
+    private static ItemStack[] stacksFromBase64(String data) {
+        if (data == null)
+            return new ItemStack[]{};
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+        BukkitObjectInputStream dataInput = null;
+        ItemStack[] stacks = null;
+
+        try {
+            dataInput = new BukkitObjectInputStream(inputStream);
+            stacks = new ItemStack[dataInput.readInt()];
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        for (int i = 0; i < stacks.length; i++) {
+            try {
+                stacks[i] = (ItemStack) dataInput.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                try {
+                    dataInput.close();
+                } catch (IOException ignored) {
+                }
+                return null;
+            }
+        }
+
+        try {
+            dataInput.close();
+        } catch (IOException ignored) {
+        }
+
+        return stacks;
     }
 }

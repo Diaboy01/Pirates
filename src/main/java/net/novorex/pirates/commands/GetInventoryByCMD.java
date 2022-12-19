@@ -6,6 +6,7 @@ import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -25,9 +26,9 @@ public class GetInventoryByCMD implements CommandExecutor {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
             String inventoryString = config.getString(args[1]);
-            Inventory inv = InventoryUtils.stringToInventory(inventoryString);
+            ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
 
-            Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
+            Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
                 if(player.getInventory().firstEmpty() == -1) {
                     player.getWorld().dropItem(player.getLocation(), itemStack);
                 } else {
@@ -45,9 +46,9 @@ public class GetInventoryByCMD implements CommandExecutor {
             if(config.get(args[0]) != null) {
                 Bukkit.dispatchCommand(console, "eco take " + player.getName() + " 33");
                 String inventoryString = config.getString(args[0]);
-                Inventory inv = InventoryUtils.stringToInventory(inventoryString);
+                ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
 
-                Arrays.stream(inv.getContents()).filter(Objects::nonNull).forEach(itemStack -> {
+                Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
                     if (player.getInventory().firstEmpty() == -1) {
                         player.getWorld().dropItem(player.getLocation(), itemStack);
                     } else {
