@@ -1,6 +1,8 @@
 package net.novorex.pirates.listener;
 
 import com.google.common.collect.Lists;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.novorex.pirates.Main;
 import net.novorex.pirates.api.InventoryUtils;
 import net.novorex.pirates.api.Utils;
@@ -67,7 +69,7 @@ public class PlayerDeathListener implements Listener {
         event.setKeepLevel(true);
 
         long time = System.currentTimeMillis();
-        player.sendMessage("§l§k->§r§0" + time + "§r§l§k<-");
+        player.sendMessage(Component.text("§l§k->§r§0" + time + "§r§l§k<-").clickEvent(ClickEvent.suggestCommand("/inv " + time)).hoverEvent(Component.text("Klicke, um den Befehl zu kopieren!")));
         String inventoryString = InventoryUtils.inventoryToString(player.getInventory());
         printYml(playerName, String.valueOf(time), inventoryString);
 
