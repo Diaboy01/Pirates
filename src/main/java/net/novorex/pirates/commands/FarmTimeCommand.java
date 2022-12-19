@@ -1,5 +1,6 @@
 package net.novorex.pirates.commands;
 
+import net.novorex.pirates.Main;
 import net.novorex.pirates.api.PlayerWorldTimings;
 import net.novorex.pirates.api.Utils;
 import org.bukkit.Bukkit;
@@ -14,20 +15,28 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 public class FarmTimeCommand implements CommandExecutor {
+
+    private static final double COST = 50;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = (Player) sender;
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        if(args.length == 0 && sender instanceof Player) {
+            Player player = (Player) sender;
 
-        PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
-        boolean counting = playerWorldTimings.isCounting();
-        playerWorldTimings.stopCounting();
-        playerWorldTimings.clearTime();
-        if(counting) {
-            playerWorldTimings.startCounting();
+            if (Main.instance.getEconomy().getBalance(player) >= COST) {
+                Main.instance.getEconomy().withdrawPlayer(player, COST);
+                PlayerWorldTimings playerWorldTimings = PlayerWorldTimings.getTimings(player.getUniqueId());
+                boolean counting = playerWorldTimings.isCounting();
+                playerWorldTimings.stopCounting();
+                playerWorldTimings.clearTime();
+                if (counting) {
+                    playerWorldTimings.startCounting();
+                }
+                player.sendMessage("Du hast für " + COST + " Dukaten deine Farmzeit zurückgesetzt.");
+            } else {
+                player.sendMessage("Du besitzt nicht genügend Dukaten.");
+            }
         }
-
-        Bukkit.dispatchCommand(console, "eco take " + player.getName() + " 50");
         return false;
     }
 }

@@ -21,7 +21,7 @@ public final class Main extends JavaPlugin {
         super.onEnable();
 
         instance = this;
-        if (!setupEconomy() ) {
+        if (!setupEconomy()) {
             getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             Bukkit.shutdown();
             return;
@@ -61,6 +61,10 @@ public final class Main extends JavaPlugin {
 
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    public Economy getEconomy() {
+        return this.economy;
     }
 
 
