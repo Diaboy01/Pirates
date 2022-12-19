@@ -1,15 +1,19 @@
 package net.novorex.pirates;
 
+import net.milkbowl.vault.economy.Economy;
 import net.novorex.pirates.api.claim.ClaimNotifyHandler;
 import net.novorex.pirates.commands.*;
 import net.novorex.pirates.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
     public static Main instance;
+
+    private Economy economy;
 
     @Override
     public void onEnable() {
@@ -17,6 +21,11 @@ public final class Main extends JavaPlugin {
         super.onEnable();
 
         instance = this;
+        if (!setupEconomy() ) {
+            getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            Bukkit.shutdown();
+            return;
+        }
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerJoinListener(), this);
@@ -39,6 +48,21 @@ public final class Main extends JavaPlugin {
 
         ClaimNotifyHandler.init();
     }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+
+        economy = rsp.getProvider();
+        return economy != null;
+    }
+
 
        //     for (Player player : Bukkit.getOnlinePlayers()) {
       //  PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player, null);
