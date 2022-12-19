@@ -67,7 +67,7 @@ public class PlayerJoinListener implements Listener {
             RandomTeleport.spawn(player);
             Bukkit.dispatchCommand(console, "team add - ");
             Bukkit.dispatchCommand(console, "team join - " + playerName);
-            Bukkit.dispatchCommand(console, "eco give " + playerName + " 100");
+            Main.instance.getEconomy().depositPlayer(player, 100);
             printYml(playerName, "Team", "-");
             player.sendTitle("§e§lEMPIRE OF PIRATES 2", "Willkommen " + playerName + "!", 20, 120, 20);
             Bukkit.getScheduler().runTaskLater(Main.instance, () -> Bukkit.dispatchCommand(console, "clear " + playerName), 20L * 8);
