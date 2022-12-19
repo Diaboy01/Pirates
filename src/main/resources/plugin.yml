@@ -5,6 +5,8 @@ api-version: 1.16
 authors: [ Diaboy01, NovorexNetwork ]
 description: novorex.net
 website: novorex.net
+depend:
+  - Vault
 
 commands:
   inv:

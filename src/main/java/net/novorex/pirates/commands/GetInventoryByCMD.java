@@ -1,5 +1,6 @@
 package net.novorex.pirates.commands;
 
+import net.novorex.pirates.Main;
 import net.novorex.pirates.api.InventoryUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -25,16 +26,31 @@ public class GetInventoryByCMD implements CommandExecutor {
             File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
-            String inventoryString = config.getString(args[1]);
-            ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
+            if(config.get(args[1]) == null) {
+                player.sendMessage("Dieses Inventar existiert nicht.");
+                return false;
+            }
 
-            Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
-                if(player.getInventory().firstEmpty() == -1) {
-                    player.getWorld().dropItem(player.getLocation(), itemStack);
-                } else {
-                    player.getInventory().addItem(itemStack);
+            String inventoryString = config.getString(args[1]);
+
+            try {
+                long timestamp = Long.parseLong(inventoryString);
+                if(timestamp < 1671491463968L) {
+                    player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
+                    return false;
                 }
-            });
+
+                ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
+                Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
+                    if (player.getInventory().firstEmpty() == -1) {
+                        player.getWorld().dropItem(player.getLocation(), itemStack);
+                    } else {
+                        player.getInventory().addItem(itemStack);
+                    }
+                });
+            } catch (NumberFormatException exception) {
+                player.sendMessage("Das ist keine gültige Inventar-Nummer!");
+            }
         }
         if(args.length == 1) {
             Player player = (Player) sender;
@@ -44,7 +60,13 @@ public class GetInventoryByCMD implements CommandExecutor {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
             if(config.get(args[0]) != null) {
-                Bukkit.dispatchCommand(console, "eco take " + player.getName() + " 33");
+                long timestamp = Long.parseLong(args[0]);
+                if(timestamp < 1671491463968L) {
+                    player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
+                    return false;
+                }
+
+                Main.instance.getEconomy().withdrawPlayer(player, 33);
                 String inventoryString = config.getString(args[0]);
                 ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
 
@@ -55,6 +77,8 @@ public class GetInventoryByCMD implements CommandExecutor {
                         player.getInventory().addItem(itemStack);
                     }
                 });
+
+                player.sendMessage("Du hast dir dein Inventar für 33 Dukaten zurückgekauft.");
             } else {
                 player.sendMessage("Diese Zahl existiert nicht.");
             }

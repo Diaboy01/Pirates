@@ -1,29 +1,15 @@
 package net.novorex.pirates.api;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.bukkit.Bukkit;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.server.v1_16_R3.MojangsonParser;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
 
 public class InventoryUtils {
 
@@ -149,15 +135,22 @@ public class InventoryUtils {
     private static String toBase64(ItemStack[] contents) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            dataOutput.writeInt(contents.length);
+            dataOutputStream.writeInt(contents.length);
+            for(ItemStack itemStack : contents) {
+                if(itemStack == null || itemStack.getType().isAir()) {
+                    continue;
+                }
 
-            for (ItemStack stack : contents) {
-                dataOutput.writeObject(stack);
+                dataOutputStream.writeUTF(itemStack.getType().name());
+                dataOutputStream.writeInt(itemStack.getAmount());
+
+                net.minecraft.server.v1_16_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                dataOutputStream.writeUTF(nmsStack.getOrCreateTag().toString());
             }
 
-            dataOutput.close();
+            dataOutputStream.flush();
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Exception e) {
             throw new IllegalStateException("Unable to save item stacks.", e);
@@ -165,37 +158,34 @@ public class InventoryUtils {
     }
 
     private static ItemStack[] stacksFromBase64(String data) {
-        if (data == null)
-            return new ItemStack[]{};
+        if (data == null) return new ItemStack[0];
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-        BukkitObjectInputStream dataInput = null;
-        ItemStack[] stacks = null;
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+        DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
 
         try {
-            dataInput = new BukkitObjectInputStream(inputStream);
-            stacks = new ItemStack[dataInput.readInt()];
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+            int amount = dataInputStream.readInt();
+            int index = 0;
 
-        for (int i = 0; i < stacks.length; i++) {
-            try {
-                stacks[i] = (ItemStack) dataInput.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                try {
-                    dataInput.close();
-                } catch (IOException ignored) {
-                }
-                return null;
+            ItemStack[] stacks = new ItemStack[amount];
+
+            while (dataInputStream.available() > 0) {
+                if(index == amount) throw new IllegalStateException("Index can not be larger than amount received.");
+
+                ItemStack itemStack = new ItemStack(Material.valueOf(dataInputStream.readUTF()), dataInputStream.readInt());
+                String nbtString = dataInputStream.readUTF();
+                NBTTagCompound nbtTagCompound = MojangsonParser.parse(nbtString);
+                net.minecraft.server.v1_16_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+                nmsStack.setTag(nbtTagCompound);
+                itemStack = CraftItemStack.asBukkitCopy(nmsStack);
+                stacks[index++] = itemStack;
             }
+
+            return stacks;
+        } catch (IOException | CommandSyntaxException | IllegalArgumentException exception) {
+            exception.printStackTrace();
         }
 
-        try {
-            dataInput.close();
-        } catch (IOException ignored) {
-        }
-
-        return stacks;
+        return new ItemStack[0];
     }
 }
