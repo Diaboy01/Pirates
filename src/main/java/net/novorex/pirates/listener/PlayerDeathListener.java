@@ -73,8 +73,9 @@ public class PlayerDeathListener implements Listener {
         String inventoryString = InventoryUtils.inventoryToString(player.getInventory());
         printYml(playerName, String.valueOf(time), inventoryString);
 
-        event.getDrops().clear();
         event.setKeepLevel(true);
+        event.getDrops().clear();
+        event.setDroppedExp(0);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[4]);
         player.getWorld().strikeLightningEffect(player.getLocation());

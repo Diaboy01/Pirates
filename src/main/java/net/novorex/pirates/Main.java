@@ -44,7 +44,8 @@ public final class Main extends JavaPlugin {
         getCommand("claim").setExecutor(new ClaimCommand());
         getCommand("dukaten").setExecutor(new DukatenCommand());
         getCommand("time").setExecutor(new FarmTimeCommand());
-        getCommand("shop").setExecutor(new ShopCommand());
+        getCommand("shop").setExecutor(new UserShopCommand());
+        getCommand("adminshop").setExecutor(new AdminShopCMD());
 
         ClaimNotifyHandler.init();
     }

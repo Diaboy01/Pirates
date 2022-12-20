@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -35,10 +36,6 @@ public class GetInventoryByCMD implements CommandExecutor {
 
             try {
                 long timestamp = Long.parseLong(inventoryString);
-                if(timestamp < 1671491463968L) {
-                    player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
-                    return false;
-                }
 
                 ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
                 Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
@@ -59,9 +56,10 @@ public class GetInventoryByCMD implements CommandExecutor {
             File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
 
-            if(config.get(args[0]) != null) {
+            if (Main.instance.getEconomy().getBalance(player) >= 33) {
+            if (config.get(args[0]) != null) {
                 long timestamp = Long.parseLong(args[0]);
-                if(timestamp < 1671491463968L) {
+                if (timestamp < 1671491463968L) {
                     player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
                     return false;
                 }
@@ -77,10 +75,21 @@ public class GetInventoryByCMD implements CommandExecutor {
                         player.getInventory().addItem(itemStack);
                     }
                 });
+                assert inventoryString != null;
+                config.set(inventoryString, null);
+
+                try {
+                    config.save(playersFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 player.sendMessage("Du hast dir dein Inventar für 33 Dukaten zurückgekauft.");
             } else {
-                player.sendMessage("Diese Zahl existiert nicht.");
+                player.sendMessage("Dieses Inventar existiert nicht.");
+            }
+        } else {
+                player.sendMessage("Du besitzt nicht genügend Dukaten!");
             }
         }
 
