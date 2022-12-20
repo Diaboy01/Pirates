@@ -32,42 +32,20 @@ public class GetInventoryByCMD implements CommandExecutor {
                 return false;
             }
 
-            String inventoryString = config.getString(args[1]);
-
             try {
-                long timestamp = Long.parseLong(inventoryString);
+                String inventoryString = config.getString(args[0]);
+                if(inventoryString == null) {
+                    player.sendMessage("Dieses Inventar existiert nicht.");
+                    return false;
+                }
 
-                ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
-                Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
-                    if (player.getInventory().firstEmpty() == -1) {
-                        player.getWorld().dropItem(player.getLocation(), itemStack);
-                    } else {
-                        player.getInventory().addItem(itemStack);
-                    }
-                });
-            } catch (NumberFormatException exception) {
-                player.sendMessage("Das ist keine gültige Inventar-Nummer!");
-            }
-        }
-        if(args.length == 1) {
-            Player player = (Player) sender;
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
-            File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
-
-            if (Main.instance.getEconomy().getBalance(player) >= 33) {
-            if (config.get(args[0]) != null) {
                 long timestamp = Long.parseLong(args[0]);
                 if (timestamp < 1671491463968L) {
                     player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
                     return false;
                 }
 
-                Main.instance.getEconomy().withdrawPlayer(player, 33);
-                String inventoryString = config.getString(args[0]);
                 ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
-
                 Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
                     if (player.getInventory().firstEmpty() == -1) {
                         player.getWorld().dropItem(player.getLocation(), itemStack);
@@ -75,20 +53,58 @@ public class GetInventoryByCMD implements CommandExecutor {
                         player.getInventory().addItem(itemStack);
                     }
                 });
-                assert inventoryString != null;
-                config.set(inventoryString, null);
 
+                config.set(inventoryString, null);
                 try {
                     config.save(playersFile);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-
-                player.sendMessage("Du hast dir dein Inventar für 33 Dukaten zurückgekauft.");
-            } else {
-                player.sendMessage("Dieses Inventar existiert nicht.");
+            } catch (NumberFormatException exception) {
+                player.sendMessage("Das ist keine gültige Inventar-Nummer!");
             }
-        } else {
+        } else if(args.length == 1) {
+            Player player = (Player) sender;
+
+            File playersFile = new File("plugins/Novorex/Players/", player.getName() + ".yml");
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(playersFile);
+
+            if (Main.instance.getEconomy().getBalance(player) >= 33) {
+                if (config.get(args[0]) != null) {
+                    String inventoryString = config.getString(args[0]);
+                    if(inventoryString == null) {
+                        player.sendMessage("Dieses Inventar existiert nicht.");
+                        return false;
+                    }
+
+                    long timestamp = Long.parseLong(args[0]);
+                    if (timestamp < 1671491463968L) {
+                        player.sendMessage("Dieses Inventar wird von unserem neuen System nicht mehr unterstützt.");
+                        return false;
+                    }
+
+                    Main.instance.getEconomy().withdrawPlayer(player, 33);
+                    ItemStack[] stacks = InventoryUtils.stringToContent(inventoryString);
+                    Arrays.stream(stacks).filter(Objects::nonNull).forEach(itemStack -> {
+                        if (player.getInventory().firstEmpty() == -1) {
+                            player.getWorld().dropItem(player.getLocation(), itemStack);
+                        } else {
+                            player.getInventory().addItem(itemStack);
+                        }
+                    });
+
+                    config.set(inventoryString, null);
+                    try {
+                        config.save(playersFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    player.sendMessage("Du hast dir dein Inventar für 33 Dukaten zurückgekauft.");
+                } else {
+                    player.sendMessage("Dieses Inventar existiert nicht.");
+                }
+            } else {
                 player.sendMessage("Du besitzt nicht genügend Dukaten!");
             }
         }
