@@ -69,7 +69,7 @@ public class PlayerDeathListener implements Listener {
         event.setKeepLevel(true);
 
         long time = System.currentTimeMillis();
-        player.sendMessage(Component.text("§l§k->§r§0" + time + "§r§l§k<-").clickEvent(ClickEvent.suggestCommand("/inv " + time)).hoverEvent(Component.text("Klicke, um den Befehl zu kopieren!")));
+        player.sendMessage("§l§k->§r§0" + time + "§r§l§k<-");
         String inventoryString = InventoryUtils.inventoryToString(player.getInventory());
         printYml(playerName, String.valueOf(time), inventoryString);
 
