@@ -91,8 +91,10 @@ public class PlayerDeathListener implements Listener {
         //
         String claimedCurrently = ClaimAPI.getClaimed(player.getLocation().getChunk());
         if (claimedCurrently != null && playerName.equals(Bukkit.getOfflinePlayer(UUID.fromString(claimedCurrently)).getName())){
-            event.setDeathMessage("§7§l" + event.getDeathMessage() + " (" + player.getKiller().getName() + ")");
+            event.setDeathMessage("§7§l" + event.getDeathMessage() + " (" + player.getName() + " vs " + player.getKiller().getName() + ")");
             printDeath(event.getEntity(), event.getEntity().getLocation(), event.getDeathMessage(), player.getKiller());
-        } else {event.setDeathMessage("§7" + event.getDeathMessage());}
+        } else {
+            event.setDeathMessage("§8" + event.getDeathMessage() + " (" + player.getName() + " vs " + player.getKiller().getName() + ")");
+        }
     }
 }

@@ -24,7 +24,7 @@ public class PlayerExtraDamageListener implements Listener
                 return;
             }
             final double percent = health * value;
-            event.setDamage(event.getDamage() * (1.0 - percent)); // 1.0 + percent wurde zu 1.0 - percent
+            event.setDamage(event.getDamage() * (1.0 + percent)); // 1.0 - percent wurde zu 1.0 + percent
         }
     }
 }

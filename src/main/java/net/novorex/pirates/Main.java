@@ -38,7 +38,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PlayerMotdListener(), this);
         pluginManager.registerEvents(new ChatListener(), this);
 
-        getCommand("talk").setExecutor(new FakeTalk());
+        getCommand("talk").setExecutor(new TalkCommand());
         getCommand("inv").setExecutor(new GetInventoryByCMD());
         getCommand("modifydamage").setExecutor(new PlayerDamageCommand());
         getCommand("claim").setExecutor(new ClaimCommand());
@@ -46,6 +46,12 @@ public final class Main extends JavaPlugin {
         getCommand("time").setExecutor(new FarmTimeCommand());
         getCommand("shop").setExecutor(new UserShopCommand());
         getCommand("adminshop").setExecutor(new AdminShopCMD());
+        getCommand("o").setExecutor(new OchatCommand());
+        getCommand("create").setExecutor(new CreateTeam());
+        getCommand("add").setExecutor(new AddLeader());
+        getCommand("invite").setExecutor(new Invite());
+        getCommand("accept").setExecutor(new Accept());
+        getCommand("mobspawn").setExecutor(new MobSpawnCommand());
 
         ClaimNotifyHandler.init();
     }
