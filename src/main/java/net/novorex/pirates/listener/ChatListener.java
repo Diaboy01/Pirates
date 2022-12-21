@@ -30,10 +30,8 @@ public class ChatListener implements Listener {
         } else {prefix = "§" + farbe + "#" + prefix + " ";}
 
         if(player.isOp()) {
-            player.setPlayerListName("§" + farbe + player.getDisplayName());
             player.setDisplayName(prefix + player.getDisplayName());
         } else {
-            player.setPlayerListName("§" + farbe + player.getDisplayName());
             player.setDisplayName(prefix + player.getDisplayName());
         }
 
