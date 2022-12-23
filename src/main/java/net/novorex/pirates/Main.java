@@ -52,7 +52,6 @@ public final class Main extends JavaPlugin {
         getCommand("invite").setExecutor(new Invite());
         getCommand("accept").setExecutor(new Accept());
         getCommand("mobspawn").setExecutor(new MobSpawnCommand());
-        getCommand("withdraw").setExecutor(new WithdrawCommand());
 
         ClaimNotifyHandler.init();
     }
