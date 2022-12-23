@@ -17,4 +17,9 @@ commands:
   time:
   shop:
   adminshop:
-  withdraw:
+  o:
+  create:
+  add:
+  invite:
+  accept:
+  mobspawn:

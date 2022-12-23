@@ -50,13 +50,14 @@ public class PlayerJoinListener implements Listener {
             String prefix = String.format("%s", teamName);
             if (teamName == null || prefix == null || prefix.equals("-")) {
                 prefix = "";
-            } else {prefix = "#" + prefix + " ";}
+            } else {prefix = prefix + " ";}
 
             if(player.isOp()) {
-                player.setPlayerListName("" + prefix + "" + player.getDisplayName());
+                player.setDisplayName(prefix + player.getDisplayName());
             } else {
-                player.setPlayerListName("" + prefix + "" + player.getDisplayName());
+                player.setDisplayName(prefix + player.getDisplayName());
             }
+
             Bukkit.dispatchCommand(console, "team add " + teamName);
             Bukkit.dispatchCommand(console, "team join " + teamName + " " + playerName);
         } else {
