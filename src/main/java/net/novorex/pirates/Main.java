@@ -46,6 +46,7 @@ public final class Main extends JavaPlugin {
         getCommand("time").setExecutor(new FarmTimeCommand());
         getCommand("shop").setExecutor(new UserShopCommand());
         getCommand("adminshop").setExecutor(new AdminShopCMD());
+        getCommand("withdraw").setExecutor(new WithdrawCommand());
 
         ClaimNotifyHandler.init();
     }
