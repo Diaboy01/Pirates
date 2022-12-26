@@ -23,8 +23,8 @@ public class ShopCosmeticInventory extends CustomInventory {
             }
         });
 
-        super.setSlot(12, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_BANDANA_HELMET")).addLore("§7Kosten: §650 Dukaten").get(), new ShopBuyAction(50, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_BANDANA_HELMET")).get()));
-        super.setSlot(13, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_HAT_HELMET")).addLore("§7Kosten: §675 Dukaten").get(), new ShopBuyAction(75, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_HAT_HELMET")).get()));
-        super.setSlot(14, new ItemAPI(Material.valueOf("PIRATE_HAT_PIRATE_HELMET")).addLore("§7Kosten: §6100 Dukaten").get(), new ShopBuyAction(100, new ItemAPI(Material.valueOf("PIRATE_HAT_PIRATE_HELMET")).get()));
+        super.setSlot(12, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_BANDANA_HELMET")).addLore("§7Kosten: §625 Dukaten").get(), new ShopBuyAction(25, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_BANDANA_HELMET")).get()));
+        super.setSlot(13, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_HAT_HELMET")).addLore("§7Kosten: §638 Dukaten").get(), new ShopBuyAction(38, new ItemAPI(Material.valueOf("BONESANDSWORDS_PIRATE_HAT_HELMET")).get()));
+        super.setSlot(14, new ItemAPI(Material.valueOf("PIRATE_HAT_PIRATE_HELMET")).addLore("§7Kosten: §650 Dukaten").get(), new ShopBuyAction(50, new ItemAPI(Material.valueOf("PIRATE_HAT_PIRATE_HELMET")).get()));
     }
 }
