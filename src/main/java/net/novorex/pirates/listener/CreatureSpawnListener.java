@@ -13,6 +13,7 @@ public class CreatureSpawnListener implements Listener {
         EntityType type = event.getEntity().getType();
         if (
                 type == EntityType.PHANTOM ||
+                type == EntityType.BAT ||
                 type == EntityType.CREEPER ||
                 type == EntityType.ENDERMAN
         ) {

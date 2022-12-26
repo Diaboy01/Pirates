@@ -16,7 +16,8 @@ public class PlayerExtraDamageListener implements Listener
         if (event.getEntity() instanceof Player) {
             final Player player = (Player)event.getEntity();
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "effect clear " + player.getName() + " shark_mod:bleeding");
+            Bukkit.dispatchCommand(console, "minecraft:effect clear " + player.getName() + " shark_mod:bleeding");
+            Bukkit.dispatchCommand(console, "minecraft:effect clear " + player.getName() + " rats:plague");
 
             final double health = player.getHealth();
             final double value = PlayerDamageCommand.getValue();
