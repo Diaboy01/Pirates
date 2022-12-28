@@ -23,9 +23,10 @@ commands:
   invite:
   accept:
   oldmobspawn:
-  NetherRandomTPCommand:
+  NetherRandomTP:
   FerrousWroughtnautMobSpawn:
   FrostedMobSpawn:
   FrostmawMobSpawn:
   HoarfrostMobSpawn:
   NagaMobSpawn:
+  Deathban:

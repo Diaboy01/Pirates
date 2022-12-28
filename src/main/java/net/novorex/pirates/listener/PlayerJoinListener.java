@@ -6,6 +6,7 @@ import net.novorex.pirates.Main;
 import net.novorex.pirates.api.RandomTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -60,6 +61,16 @@ public class PlayerJoinListener implements Listener {
 
             Bukkit.dispatchCommand(console, "team add " + teamName);
             Bukkit.dispatchCommand(console, "team join " + teamName + " " + playerName);
+
+            World world = Bukkit.getWorld("world");
+            String worldName = world.getName();
+
+            if (!worldName.equalsIgnoreCase("world") && !player.hasPermission("empire.portal")) {
+                assert world != null;
+                RandomTeleport.spawn(player);
+                player.sendMessage("Diese Welt ist gesperrt!");
+            }
+
         } else {
             //FIRST JOIN
             //for(int i = 0; i < 35; i++){

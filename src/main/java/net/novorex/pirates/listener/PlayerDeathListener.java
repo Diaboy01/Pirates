@@ -10,6 +10,8 @@ import net.novorex.pirates.api.claim.ClaimAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,6 +67,15 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         String playerName = player.getName();
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+        World world = player.getWorld();
+        String worldName = world.getName();
+
+        if (!worldName.equalsIgnoreCase("world")) {
+            Bukkit.dispatchCommand(console, "msg Diaboy01 " + playerName);
+        }
+
 
         event.setKeepLevel(true);
 
