@@ -51,7 +51,14 @@ public final class Main extends JavaPlugin {
         getCommand("add").setExecutor(new AddLeader());
         getCommand("invite").setExecutor(new Invite());
         getCommand("accept").setExecutor(new Accept());
-        getCommand("mobspawn").setExecutor(new MobSpawnCommand());
+        getCommand("oldmobspawn").setExecutor(new OldMobSpawnCommand());
+        getCommand("NetherRandomTPCommand").setExecutor(new NetherRandomTPCommand());
+        getCommand("FerrousWroughtnautMobSpawn").setExecutor(new FerrousWroughtnautMobSpawnCommand());
+        getCommand("FrostedMobSpawn").setExecutor(new FrostedMobSpawnCommand());
+        getCommand("FrostmawMobSpawn").setExecutor(new FrostmawMobSpawnCommand());
+        getCommand("HoarfrostMobSpawn").setExecutor(new HoarfrostMobSpawnCommand());
+        getCommand("NagaMobSpawnCommand").setExecutor(new NagaMobSpawnCommand());
+
 
         ClaimNotifyHandler.init();
     }

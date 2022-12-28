@@ -22,7 +22,7 @@ public class PortalListener implements Listener {
         World worldGetTo = event.getPlayer().getWorld();
         String worldGetToName = worldGetTo.getName();
 
-        if (!worldGetToName.equalsIgnoreCase("world")) {
+        if (!worldGetToName.equalsIgnoreCase("world") && !player.hasPermission("empire.portal")) {
             assert world != null;
             RandomTeleport.spawn(player);
             player.sendMessage("Diese Welt ist gesperrt!");
