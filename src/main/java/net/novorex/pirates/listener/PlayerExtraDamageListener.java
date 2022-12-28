@@ -18,6 +18,7 @@ public class PlayerExtraDamageListener implements Listener
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             Bukkit.dispatchCommand(console, "minecraft:effect clear " + player.getName() + " shark_mod:bleeding");
             Bukkit.dispatchCommand(console, "minecraft:effect clear " + player.getName() + " rats:plague");
+            Bukkit.dispatchCommand(console, "minecraft:effect clear " + player.getName() + " pirates_armoury:bleed");
 
             final double health = player.getHealth();
             final double value = PlayerDamageCommand.getValue();
